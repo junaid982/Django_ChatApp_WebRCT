@@ -1,0 +1,17 @@
+
+1 create project 
+
+>>> django-admin startproject VideoChat
+
+
+2 - create application video
+
+>>> cd VideoChat
+
+>>> python manage.py startapp video
+
+>>>code .
+
+3 - run server
+>>> python manage.py runserver
+

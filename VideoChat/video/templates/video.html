@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- bootstrap css  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <!-- Bootstrap Js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+
+    <!-- bootstrap icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link rel="icon" type="image/x-icon" href="{% static 'Logo/videocall.ico' %}">
+
+    <title>Video Page</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row py-2">
+
+            <!-- Our Video -->
+            <div class="col-sm">
+                <video height="300" id="ours"></video>
+            </div>
+
+            <!-- Remote Video -->
+            <div class="col-sm">
+                <video height="300" id="remote"></video>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <button id="call" style="display: none" class="btn btn-outline-primary my-3 mx-3">
+            Call
+        </button>
+        <button id="camera" class="btn btn-outline-primary my-3 mx-3">Mute</button>
+        <p class="lead"><strong>Note. </strong> Wait to other person join</p>
+    </div>
+
+
+
+    <!-- javascpts start from here  -->
+    <script>
+
+    </script>
+
+</body>
+
+</html>
