@@ -34,7 +34,7 @@
             <h2 class="display-1">Video Call</h2>
         </div>
 
-        <form class="container" method="POST" action="">
+        <form class="container" method="POST" action="{% url 'index' %}">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Room Name</label>

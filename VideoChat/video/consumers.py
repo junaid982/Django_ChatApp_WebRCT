@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 class VideoChat(AsyncJsonWebsocketConsumer):
     async def connect(self):
-        await self.connect()
+        await self.accept()
 
     async def receive_json(self, content):
         if(content['command'] == 'join_room'):
@@ -20,6 +20,21 @@ class VideoChat(AsyncJsonWebsocketConsumer):
                 'offer':content['offer']
             })
 
+        elif (content['command'] == 'answer'):
+            await self.channel_layer.group_send(content['room'],{
+                'type':'answer.message',
+                'answer':content['answer']
+            }) 
+
+        elif (content['command'] == 'candidate'):
+            await self.channel_layer.send_group(content['room'],{
+                'type':'candidate.message',
+                'candidate':content['candidate'],
+                'iscreated':content['iscreated']
+            })
+
+
+
     async def join_message(self , event):
         await self.send_json({
             'command':'join'
@@ -31,3 +46,32 @@ class VideoChat(AsyncJsonWebsocketConsumer):
             'command':'offer',
             'offer':event['offer']
         })
+
+
+    async def answer_message(self , event):
+        await self.send_json({
+            'command':'answer',
+            'answer':event['answer']
+        })
+
+
+    async def candidate_message(self,event):
+        await self.send_json({
+            'command':'candidate',
+            'candidate':event['candidate'],
+            'iscreated':event['iscreated'],
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+

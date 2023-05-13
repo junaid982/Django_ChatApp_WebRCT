@@ -48,14 +48,29 @@
             Call
         </button>
         <button id="camera" class="btn btn-outline-primary my-3 mx-3">Mute</button>
-        <p class="lead"><strong>Note. </strong> Wait to other person join</p>
+        <p class="lead"><strong>Note. </strong> Wait to other person to join</p>
     </div>
 
 
-
+    
     <!-- javascpts start from here  -->
     <script>
 
+    // const BaseUrl = ;
+        // capture video camera 
+
+        const our_video = document.getElementById('ours');
+        const remote_video = document.getElementById('remote');
+        
+        let stream;
+        let rtcpeerconnection;
+        
+        const ws = new WebSocket('ws://127.0.0.1:8000/ws/');
+        
+        ws.onopen = () =>{
+            console.log('Connection open !')
+        }
+        
     </script>
 
 </body>
