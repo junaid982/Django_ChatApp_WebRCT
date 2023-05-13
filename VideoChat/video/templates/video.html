@@ -22,7 +22,8 @@
     <!-- bootstrap icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <link rel="icon" type="image/x-icon" href="{% static 'Logo/videocall.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'videocall.ico' %}">
+
 
     <title>Video Page</title>
 </head>
@@ -42,7 +43,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="container">
         <button id="call" style="display: none" class="btn btn-outline-primary my-3 mx-3">
             Call
@@ -52,25 +53,83 @@
     </div>
 
 
-    
+
     <!-- javascpts start from here  -->
     <script>
 
-    // const BaseUrl = ;
+        // const BaseUrl = ;
         // capture video camera 
 
         const our_video = document.getElementById('ours');
         const remote_video = document.getElementById('remote');
-        
+        const call_btn = document.getElementById('call');
+
         let stream;
         let rtcpeerconnection;
-        
+
+        const created = '{{created}}';
+        const room = '{{room}}';
+
+        let isCreated;
+
         const ws = new WebSocket('ws://127.0.0.1:8000/ws/');
-        
-        ws.onopen = () =>{
+
+        ws.onopen = () => {
+
+            ws.send(JSON.stringify({
+                command: 'join_room',
+                room: room
+            }))
+
+
             console.log('Connection open !')
+            
+            if (created == "created") {
+                isCreated = true;
+                navigator.mediaDevices
+                    .getUserMedia({
+                        video: true,
+                        audio: true,
+                    })
+                    .then((s) => {
+                        stream = s;
+                        our_video.srcObject = s;
+                        our_video.onloadeddata = () => {
+                            our_video.play();
+                        };
+                    });
+                console.log(isCreated);
+            }
+            else {
+                isCreated = false
+                navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                }).then(s => {
+                    stream = s;
+                    our_video.srcObject = s;
+                    our_video.onloadeddata = () => {
+                        our_video.play()
+                    }
+
+
+                    ws.send(JSON.stringify({
+                        command: 'join',
+                        room: room
+                    }))
+
+
+
+                })
+                console.log('isCreated :', isCreated)
+
+            }
         }
+
+
         
+
+
     </script>
 
 </body>
