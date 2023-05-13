@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-drz*f0xw^br#0a=a1q$j*jyx@=_@ni2+q0$&wqtr^ss4+_kc*k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,21 +75,21 @@ ASGI_APPLICATION = 'VideoChat.asgi.application'
 
 
 # for production 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}
-
-# for development 
 # CHANNEL_LAYERS = {
 #     "default": {
-#         "BACKEND": "channels.layers.InMemoryChannelLayer"
-#     }
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("192.168.0.103", 6379)],
+#         },
+#     },
 # }
+
+# for development 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 
 
