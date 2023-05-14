@@ -33,7 +33,7 @@ class VideoChat(AsyncJsonWebsocketConsumer):
             }) 
 
         elif (content['command'] == 'candidate'):
-            await self.channel_layer.send_group(content['room'],{
+            await self.channel_layer.group_send(content['room'],{
                 'type':'candidate.message',
                 'candidate':content['candidate'],
                 'iscreated':content['iscreated']

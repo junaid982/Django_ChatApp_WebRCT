@@ -67,6 +67,15 @@
         let stream;
         let rtcpeerconnection;
 
+        // created ice server 
+        let iceServers = {
+            iceServers :[
+                {urls :"stun:stun.services.mozilla.com" },
+                {urls :"stun:stun.1.google.com:19302" },
+            ]
+        }
+
+
         const created = '{{created}}';
         const room = '{{room}}';
 
@@ -127,6 +136,96 @@
             }
         }
 
+        ws.onmessage =(e) =>{
+            const data = JSON.parse(e.data);
+
+            console.log(data)
+            if (data['command'] == 'join'){
+                if (isCreated){
+                    call_btn.style.display = 'block';
+                }
+            }else if(data['command']=='offer'){
+                if(isCreated == false){
+
+                    createanswer(data['offer'])
+                }
+            }else if (data['command'] == 'answer'){
+                if(isCreated){
+                    rtcpeerconnection.setRemoteDescription(data['answer'])
+                    console.log('answer set as remote ')
+                }
+            }else if(data['command'] == 'candidate'){
+                if(data['iscreated'] != isCreated){
+                    const IceCandidate = new RTCIceCandidate(data['candidate'])
+                    rtcpeerconnection.addIceCandidate(IceCandidate)
+                }
+            }
+
+            call_btn.onclick =() =>{
+                createOffer();
+            }
+
+            function createOffer(){
+                rtcpeerconnection = new RTCPeerConnection(iceServers)
+
+                rtcpeerconnection.onicecandidate = OnIceCandidateFunc;
+                rtcpeerconnection.ontrack = OnTrackFunc;
+
+                stream.getTracks().forEach(track => {
+                    rtcpeerconnection.addTrack(track , stream)
+                });
+                
+                rtcpeerconnection.createOffer().then(offer =>{
+                    rtcpeerconnection.setLocalDescription(offer)
+                    ws.send(JSON.stringify({
+                        'command':'offer',
+                        'offer':offer,
+                        'room':room 
+                    }))
+                })
+            }
+
+            function createanswer(offer){
+                console.log('Answer Started')
+                rtcpeerconnection = new RTCPeerConnection(iceServers)
+
+                rtcpeerconnection.onicecandidate = OnIceCandidateFunc;
+                rtcpeerconnection.ontrack = OnTrackFunc;
+
+                stream.getTracks().forEach(track => {
+                    rtcpeerconnection.addTrack(track , stream)
+                });
+                
+                rtcpeerconnection.setRemoteDescription(offer)
+                rtcpeerconnection.createAnswer().then(answer =>{
+                    rtcpeerconnection.setLocalDescription(answer)
+                    ws.send(JSON.stringify({
+                        'command':'answer',
+                        'answer':answer,
+                        'room':room 
+                    }))
+                })
+            }
+
+            function OnIceCandidateFunc(e){
+                if(e.candidate){
+                    ws.send(JSON.stringify({
+                        'command':'candidate',
+                        'candidate':e.candidate,
+                        'iscreated':isCreated,
+                        'room':room 
+                    }))
+                }
+            }
+
+            function OnTrackFunc(e){
+                remote_video.srcObject  = e.streams[0]
+                remote_video.onloadedmetadata = () =>{
+                    remote_video.play()
+                }
+            }
+
+        }
 
         
 
